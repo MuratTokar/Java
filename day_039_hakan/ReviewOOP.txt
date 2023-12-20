@@ -1,0 +1,340 @@
+// OOP Review
+(Object Orienting Programming)
+
+4 Main Principles
+
+1. Encapsulation
+2. Inheritance
+3. Abstraction
+4. Polymorphism
+
+1. Encapsulation (Sarma)
+- Datalari gizlemek/erisimini sinirlamak/sadece okunabilir yapmak icin kullandigimiz bir yaklasim/anlayis
+- private access modifier kullanilir
+- private olan datayi okumak icin getters, update etmek icin setters kullanilir.
+
+public class Encapsulation {
+	private int TCKimlikNo;
+	private int age;
+
+
+	Encapsulation(int TCKimlikNo){
+		this.TCKimlikNo = TCKimlikNo;
+	}
+
+	public int getAge(){
+		return age;
+	}
+
+	public void set(int age){
+		this.age = age;
+	}
+
+	public int getTCKimlikNo(){
+		return TCKimlikNo;
+	}
+
+	// age icin, get ve set methodlari olusturarak, bu degeri okuma ve update etme ozellgii vermis olduk
+	// private oldugu icin, object dogrudan variable a ulasip, okuma veya yazma islemi yapamaz
+
+	// TCKimlikNo degiskenine sadece get methodu yazarak, bu degerin tekrardan update edilmesini engellemis olduk
+}
+
+2. Inheritance (Kalitim)
+	- Parent class - child class
+	- Super class - subclass
+	- Base class - derived class
+
+	- IS-A Relationship
+		- Animal - Dog
+		- Student - UniversityStudent
+		- Person - Student
+		- School - Student X YANLIS
+
+	- Subclass extends SuperClass {
+
+	}
+
+	- Subclass, Superclass a ait, private olmayan tüm methodlari cagirip kullanabilir
+	- Subclass static, private ve final olmayan tüm methodlari override edebilir
+		- Methodun ismi, return type, parametresi ayni olmak zorunda, access modifieri ise ayni ya da daha genis olmak zorunda
+		- Ayni methodun, sadece icerigini degistirerek, Subclass objectlerine ozel kullanmak icin
+
+
+public class Animal {
+
+	int eat(String thing){
+		System.out.println("Animal class eat methodu");
+	}
+
+	public static void printClassName(){
+		System.out.println("Animal class");
+	}
+}
+
+public class Dog extends Animal {
+
+	public void bark(){
+		System.out.println("Dog is barking");
+	}
+
+	public static void printClassName(){
+		System.out.println("Dog class");
+	}
+
+	@Override // üst classtaki method default Access modifierina sahip oldugu icin bu method default, public, protected AMs alabilir
+	public int eat(String thing2){
+		// Does not matter
+		// Istenilen sey yazilabilir
+	}
+}
+
+	- this keyword : Ayni class icerisinde o an islem yapilan object i temsil eder
+					- fields, instance variables ile ayni isimde bir degisken kullanildiginda,
+					 bu degiskeni instance variable ile ayirt etmek icin kullanilir
+					 - this.instanceVariableName seklinde objects variables cagrilir
+					 - this.objectMethods() seklinde de classtaki methodlari cagrilir
+					 - this(parameter) seklinde, farkli parametreye sahip constructorlari cagrilir
+
+	- super() keyword :
+					- Subclasstan, Superclass a erismek icin kullanilir
+					- super.superClassVariables
+					- super.superClassMethods()
+					- super(parametre) Superclasstaki uygun parametreli constructorlari cagiririz
+					- Subclass taki her constructorda, ilk satir(ilk calismasi gereken kod)
+					 default olarak super(); gizli methodu ile calistirilir
+
+public class Animal {
+
+	// No-Argument constructor
+	Animal(){
+		System.out.println("Animal default constructor");
+	}
+
+	// Parameterized constructor
+	Animal(int age){
+		System.out.println("Animal parametreli constructor");
+	}
+
+
+}
+
+public class Dog extends Animal {
+
+	Dog(){
+		// super();
+		super(0);
+		System.out.println("Dog default constructor");
+	}
+
+	Dog(String name){
+		// super();
+		super(0);
+		System.out.println("Dog parametreli-name constructor");
+	}
+
+	Dog(String name, int age){
+		// hata verecek, sebebi ikisinden sadece birini kullanmamiza müsaade ediliyor
+		super(age);
+		this(name);
+		System.out.println("Dog parametreli-name-age constructor");
+	}
+
+}
+
+public class TestAnimal {
+	public static void main(String[] args){
+		Dog dog = new Dog();
+		// Animal default constructor
+		// Dog default constructor
+		// !!! Animal() Super class in default constructori olmasa idi, hata verirdi
+
+		Dog dog = new Dog("Rocky", 3);
+		// Animal default constructor
+		// Dog parametreli constructor
+		// !!! Animal() Super class in default constructori olmasa idi, hata verirdi
+
+		// !!! Animal() constructor olmadan, kullanmak istiyorsam,
+		// subclass taki constructorlara manuel olarak super(paramter) yazarak,
+		// superclasstaki var olan parametreli constructora yonlendirmem gerekir
+		// super(age); seklinde subclasslara el ile yazmamiz gerekir
+
+	}
+}
+
+Inheritance Types :
+1 - Single (Einzelkind iliskisi)
+	class A {}
+	class B extends A{}
+	- 1 parentclass 1 subclass
+
+2 - Multilevel (Dede-torun iliskisi)
+	class A{}
+	class B extends A{}
+	class C extends B{}
+	1 parent 1 child - 1 child (parent) - 1 child
+	Animal - Dog - Dobberman
+
+3 - Hyerarchical (Coklu cocuk iliskisi)
+	class A{}
+	class B extends A{}
+	class C extends A{}
+	1 parent 1 den fazla child
+
+4 - Multiple (coklu parent iliskisi)
+	- Normal classlarda izin verilmez
+	- interfacelerde kullanilir
+	- 1 class in 1 den fazla interfaci inherit etmesi
+	- implements keyword u ile...
+
+
+3. Abstraction (Soyutlama)
+
+	- abstract keyword u kullanarak, bir class i veya methodu Soyutlama
+		- variables abstract olamaz
+
+	Abstract Class
+	- Kendisinden object olusturulmasi istenmeyen class
+	- extend keywordu kullanilarak normal bir class gibi inherit edilebilir/edebilir
+	- constructorlari vardir, fakat kendisi icin degil, altindaki subclass larin kullanmasi icin
+	- bir abstract method yazilmasi icin, o class in abstract class olmasi gerekir
+
+	Abstract method
+	- diger methodlardan farkli olarak. implemetation yapilmamis methodlara denir
+		public abstract void getName(); bu sekilde yazilir
+	- Subclass lar abstract methodlari "override" kuralina göre implemetation yaparlar
+	- Subclass abstract class ise, methodu implementation yapmak zorunda degil, fakat yapabilir
+	- Gercek subclass veya abstract subclasslari inherit eden gercek subclass,
+		 kendi seviyesine kadar implementation yapilmamis tüm abstract methodlari implemente etmek zorundadir.
+		 - Bu class a "concrete" class denir.
+
+// abstract parent, real subclass
+public abstract class A {
+
+	public abstract void methodName(String param);
+}
+
+public class B extends A {
+	// implementation
+	public void methodName(String param){
+		// code
+	}
+}
+
+// abstract parent, abstract child, real enkel/grandson
+public abstract class A {
+
+	public abstract void methodName(String param);
+}
+
+public abstract class B extends A {
+	// implementation
+	public void methodName(String param){
+		// code
+	}
+}
+
+public class C extends B {
+	// Eger, class B de, abstract method implementation yapildi ise, bu class implemente etmek zorunda degil
+	// yapilmadi ise, bu class implemente edilmemis tüm abstract methodlari implementation yapmak zorunda
+	// bu class a concrete class denir
+	// implementation
+	public void methodName(String param){
+		// code
+	}
+}
+
+
+		- abstract methodlar alt classlarda implementation yapilmak zorunda oldugu icin...
+			- private veya final olamazlar
+
+Interface : Abstract class in en soyut hali
+		- "class" yerine "interface" keywordu ile kullanilir
+		- "extends" yerine "implements" keywordu ile inherit edilir
+		- Icerisindeki tüm variablelar, static ve final keyword u kullanmasalar bile, default olarak bu keywordlere sahiptir
+		- static ve default methodlari haric, implementation yapilamaz
+		- default method, alttaki subclasslar tarafindan override edilebilir
+		- Multiple inheritance uygulanabilir
+		- bir class birden fazla interface i implement edebilir
+
+public interface A {
+
+}
+
+public interface B {
+
+}
+
+public class C implements A,B {
+
+}
+
+// 2 interface birbirini extend edebilir, nadir bir kullanimdir
+public interface A extends B {
+
+}
+
+public interface B {
+
+}
+
+
+
+
+
+
+4. Polymorphism (Cokbicimlilik)
+
+	- subclass i belirgin olmayan datalarda, superclass referansi ile
+	 subclass objectini olusturmak ve ortak methodlarda kullanmak icindir.
+
+Animal - Dog
+Animal - Cat
+Animal - Bird
+
+Dog dog = new Dog();
+Cat cat = new Cat();
+Bird bird = new Bird();
+
+Animal dog = new Dog();
+Animal cat = new Cat();
+Animal bird = new Bird();
+
+methodName(dog);
+methodName(cat);
+methodName(bird);
+
+public void methodName(Animal animal){
+	animal.eat();
+	if(animal instanceof Dog){
+		Dog dog = new Dog();
+		dog = (Dog) animal;
+		System.out.println("Bu object bir Dog class a aittir");
+	} else if(animal instanceof Cat){
+		System.out.println("Bu object bir Cat class a aittir");
+	} else if (animal instanceof Bird){
+		System.out.println("Bu object bir Bird class a aittir");
+	}
+}
+
+List<String> stringList = new ArrayList<String>;
+public void methodName(List<String> list){}
+
+WebDriver driver = getDriver(browserType);
+
+public WebDriver getDriver(String browserType){
+	switch(browserType){
+	case "chrome":
+		return new ChromeDriver();
+	case "firefox":
+		return new FirefoxDriver();
+	}
+}
+
+
+chrome : openTwoTab()
+firefox : method yok
+
+if(driver instanceof ChromeDriver){
+	driver.openTwoTab()
+}

@@ -1,0 +1,23 @@
+package day_068_hakan;
+
+public class Q165 {
+    public static void main(String[] args) {
+        String s1 = "Moon";
+        OraString s2 = new OraString("Moon");
+
+        if((s1=="Moon") && (s2.equals("Moon"))){
+
+        }
+    }
+}
+
+class OraString {
+    String s;
+    public boolean equals(OraString str){
+        return this.s.equalsIgnoreCase(str.toString());
+    }
+
+    OraString(String s){
+        this.s=s;
+    }
+}

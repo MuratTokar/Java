@@ -1,0 +1,72 @@
+abstract class CarManifacture{
+	private static final String brand;
+	private static final String buildYear;
+	private static final String address;
+	private static final String phoneNumber;
+
+	public static String getBrand(){
+		return brand;
+	}
+
+	public static String getBuildYear(){
+		return buildYear;
+	}
+
+	public static String getAddress(){
+		return address;
+	}
+
+	public static String getPhoneNumber(){
+		return phoneNumber;
+	}
+
+}
+
+class Cars {
+
+	private String model;
+	private String productYear;
+	private double consumePerKm;
+	private int tankVolume;
+
+	private double fuelAmount;
+	private int fullPercentage;
+
+	public String getModel(){
+		return model;
+	}
+
+	public String getProductYear{
+		return productYear;
+	}
+
+	public boolean isTankEmpty(){
+		// < 5% TRUE, not FALSE
+		return fullPercentage <= 5 ? true : false;
+	}
+
+	public boolean isTankFull(){
+		// 90 % < TRUE, not FALSE
+		return 90 <= fullPercentage ? true : false;
+	}
+
+	public void fuelTank(double fuelLiter){
+		fuelAmount += fuelLiter;
+		if(tankVolume < fuelAmount) {
+			fuelAmount = tankVolume;
+		}
+	}
+
+	public void drive(double distance){
+			fuelAmount -= consumePerKm * distance;
+			if(fuelAmount < 0){
+				fuelAmount = 0;
+				System.out.println("Yakitiniz bitti, lütfen yakit doldurun!");
+			}
+	}
+
+	public int getTankStatus(){
+		return fullPercentage;
+	}
+
+}
